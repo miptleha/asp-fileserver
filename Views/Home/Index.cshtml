@@ -1,0 +1,43 @@
+﻿@model List<ServerFile>
+
+<div class="container">
+    <form enctype="multipart/form-data" method="post">
+        <div class="input-group mb-0">
+            <div class="custom-file">
+                <input type="file" name="file">
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="FileDescription">Description</span>
+            </div>
+            <input type="text" class="form-control" placeholder="File description" aria-label="FileDescription" aria-describedby="FileDescription" name="file-desc">
+            <div class="input-group-append">
+                <button asp-action="Upload" class="btn btn-outline-secondary" type="submit" id="save">Upload</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var f in Model)
+            {
+            <tr>
+                <td>@f.Name</td>
+                <td>@f.Desc</td>
+                <td>
+                    <a asp-action="Load" asp-data-id="@f.Id" class="btn btn-primary">Load</a>
+                    <a asp-action="Delete" asp-data-id="@f.Id" class="btn btn-primary">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
