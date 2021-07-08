@@ -29,11 +29,15 @@ namespace asp_fileserver.Controllers
 
         public IActionResult Load(int id)
         {
-            return RedirectToAction("Index");
+            var m = new ServerFileManager();
+            var f = m.GetFile(id);
+            return File(f.FileStream, "application/octet-stream", f.FileName);
         }
 
         public IActionResult Delete(int id)
         {
+            var m = new ServerFileManager();
+            m.DeleteFile(id);
             return RedirectToAction("Index");
         }
 
@@ -41,19 +45,10 @@ namespace asp_fileserver.Controllers
         {
             if (Request.Form.Files.Count > 0)
             {
-                string path = Path.Combine(AppContext.BaseDirectory, "files");
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
                 var uploadedFile = Request.Form.Files[0];
-                var fileName = Path.GetFileName(uploadedFile.FileName);
-                string filePath = Path.Combine(path, fileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    uploadedFile.CopyTo(fileStream);
-                }
-
                 var desc = Request.Form["file-desc"][0];
+                var m = new ServerFileManager();
+                m.AddFile(uploadedFile, desc);
             }
             return RedirectToAction("Index");
         }
